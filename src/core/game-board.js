@@ -1,13 +1,13 @@
 import Ship from './ship';
+import { GRID_SIZE } from '../constants';
 
 export default class GameBoard {
-  #GRID_SIZE = 10;
   #grid;
   #ships;
 
   constructor() {
-    this.#grid = Array.from({ length: this.#GRID_SIZE }, () =>
-      Array.from({ length: this.#GRID_SIZE }, () => new Cell()),
+    this.#grid = Array.from({ length: GRID_SIZE }, () =>
+      Array.from({ length: GRID_SIZE }, () => new Cell()),
     );
     this.#ships = [];
   }
@@ -32,7 +32,7 @@ export default class GameBoard {
 
     const pos = [...position];
     const dir = orientation === 'x' ? 0 : 1;
-    pos[dir] = Math.min(pos[dir], this.#GRID_SIZE - ship.length);
+    pos[dir] = Math.min(pos[dir], GRID_SIZE - ship.length);
 
     const coords = [];
     for (let i = 0; i < ship.length; ++i) {
@@ -69,8 +69,8 @@ export default class GameBoard {
       Number.isInteger(y) &&
       x >= 0 &&
       y >= 0 &&
-      x < this.#GRID_SIZE &&
-      y < this.#GRID_SIZE
+      x < GRID_SIZE &&
+      y < GRID_SIZE
     );
   }
 
@@ -81,9 +81,9 @@ export default class GameBoard {
     const minY = coords[0][1];
     const maxY = coords[last][1];
     for (let i = minX - 1; i <= maxX + 1; ++i) {
-      if (i < 0 || i >= this.#GRID_SIZE) continue;
+      if (i < 0 || i >= GRID_SIZE) continue;
       for (let j = minY - 1; j <= maxY + 1; ++j) {
-        if (j < 0 || j >= this.#GRID_SIZE) continue;
+        if (j < 0 || j >= GRID_SIZE) continue;
         if (this.#grid[i][j].ship) {
           return false;
         }
