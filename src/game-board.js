@@ -80,11 +80,17 @@ export default class GameBoard {
 }
 
 class Cell {
+  #ship;
+
   constructor() {
-    this.ship = null;
+    this.#ship = null;
+  }
+
+  get ship() {
+    return this.#ship;
   }
 
   placeShip(ship) {
-    this.ship = ship;
+    this.#ship = ship;
   }
 }
