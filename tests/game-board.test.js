@@ -1,6 +1,6 @@
 import { describe, it, expect } from '@jest/globals';
-import GameBoard from '../src/game-board';
-import Ship from '../src/ship';
+import GameBoard from '../src/core/game-board';
+import Ship from '../src/core/ship';
 
 describe('GameBoard', () => {
   it('is constructible', () => {

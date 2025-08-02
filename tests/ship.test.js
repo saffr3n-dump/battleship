@@ -1,5 +1,5 @@
 import { describe, it, expect } from '@jest/globals';
-import Ship from '../src/ship';
+import Ship from '../src/core/ship';
 
 describe('Ship', () => {
   it('is constructible', () => {
