@@ -3,11 +3,13 @@ import Ship from './ship';
 export default class GameBoard {
   #GRID_SIZE = 10;
   #grid;
+  #ships;
 
   constructor() {
     this.#grid = Array.from({ length: this.#GRID_SIZE }, () =>
       Array.from({ length: this.#GRID_SIZE }, () => new Cell()),
     );
+    this.#ships = [];
   }
 
   at(x, y) {
@@ -45,6 +47,7 @@ export default class GameBoard {
     for (const [x, y] of coords) {
       this.#grid[x][y].placeShip(ship);
     }
+    this.#ships.push(ship);
   }
 
   receiveAttack(x, y) {
@@ -52,6 +55,10 @@ export default class GameBoard {
       throw new Error('Position is invalid');
     }
     this.#grid[x][y].hit();
+  }
+
+  isEveryShipSunk() {
+    return this.#ships.every((ship) => ship.isSunk());
   }
 
   #isPositionValid([x, y]) {

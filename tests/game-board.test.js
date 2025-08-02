@@ -136,4 +136,19 @@ describe('GameBoard', () => {
     gameBoard.receiveAttack(0, 0);
     expect(ship.isSunk()).toBeFalsy();
   });
+
+  it("has 'isEveryShipSunk()' method", () => {
+    expect(GameBoard.prototype.isEveryShipSunk).toBeDefined();
+  });
+
+  it("properly determines whether all ships on game board are sunk with 'isEveryShipSunk()'", () => {
+    const gameBoard = new GameBoard();
+    gameBoard.placeShip(new Ship(1), [0, 0], 'x');
+    gameBoard.placeShip(new Ship(1), [9, 9], 'x');
+    expect(gameBoard.isEveryShipSunk()).toBeFalsy();
+    gameBoard.receiveAttack(0, 0);
+    expect(gameBoard.isEveryShipSunk()).toBeFalsy();
+    gameBoard.receiveAttack(9, 9);
+    expect(gameBoard.isEveryShipSunk()).toBeTruthy();
+  });
 });
