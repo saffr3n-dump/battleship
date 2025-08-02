@@ -1,5 +1,5 @@
-import Ship from './ship';
-import { GRID_SIZE } from '../constants';
+import Ship from './ship.js';
+import { GRID_SIZE } from '../constants.js';
 
 export default class GameBoard {
   #grid;
