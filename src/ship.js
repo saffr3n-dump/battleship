@@ -1,8 +1,13 @@
 export default class Ship {
+  #MIN_LENGTH = 1;
+  #MAX_LENGTH = 4;
   #length;
   #hits;
 
   constructor(length) {
+    if (!this.#isLengthValid(length)) {
+      throw new Error('Invalid length');
+    }
     this.#length = length;
     this.#hits = 0;
   }
@@ -21,5 +26,14 @@ export default class Ship {
 
   isSunk() {
     return this.#hits >= this.#length;
+  }
+
+  #isLengthValid(length) {
+    return (
+      typeof length === 'number' &&
+      Number.isInteger(length) &&
+      length >= this.#MIN_LENGTH &&
+      length <= this.#MAX_LENGTH
+    );
   }
 }

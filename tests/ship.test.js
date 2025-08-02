@@ -3,11 +3,16 @@ import Ship from '../src/ship';
 
 describe('Ship', () => {
   it('is constructible', () => {
-    expect(() => new Ship()).not.toThrow();
+    expect(() => new Ship(1)).not.toThrow();
   });
 
   it("has 'length' field set in constructor", () => {
     expect(new Ship(3).length).toBe(3);
+  });
+
+  it("doesn't allow length < 1 or > 4", () => {
+    expect(() => new Ship(0)).toThrow();
+    expect(() => new Ship(5)).toThrow();
   });
 
   it("doesn't allow reassigning 'length'", () => {
