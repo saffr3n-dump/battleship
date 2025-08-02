@@ -47,6 +47,13 @@ export default class GameBoard {
     }
   }
 
+  receiveAttack(x, y) {
+    if (!this.#isPositionValid([x, y])) {
+      throw new Error('Position is invalid');
+    }
+    this.#grid[x][y].hit();
+  }
+
   #isPositionValid([x, y]) {
     return (
       typeof x === 'number' &&
@@ -81,16 +88,28 @@ export default class GameBoard {
 
 class Cell {
   #ship;
+  #isHit;
 
   constructor() {
     this.#ship = null;
+    this.#isHit = false;
   }
 
   get ship() {
     return this.#ship;
   }
 
+  get isHit() {
+    return this.#isHit;
+  }
+
   placeShip(ship) {
     this.#ship = ship;
+  }
+
+  hit() {
+    if (this.#isHit) return;
+    this.#isHit = true;
+    if (this.#ship) this.#ship.hit();
   }
 }

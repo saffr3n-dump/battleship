@@ -21,11 +21,13 @@ describe('GameBoard', () => {
     expect(() => gameBoard.at(9, 9)).not.toThrow();
   });
 
-  it("has 'ship' property in each cell", () => {
+  it("has 'ship' and 'isHit' properties in each cell", () => {
     const gameBoard = new GameBoard();
     for (let i = 0; i < 10; ++i) {
       for (let j = 0; j < 10; ++j) {
-        expect(gameBoard.at(i, j).ship).toBeDefined();
+        const cell = gameBoard.at(i, j);
+        expect(cell.ship).toBeDefined();
+        expect(cell.isHit).toBeDefined();
       }
     }
   });
@@ -91,5 +93,47 @@ describe('GameBoard', () => {
       }
     }
     expect(() => gameBoard.placeShip(new Ship(1), [7, 7], 'x')).not.toThrow();
+  });
+
+  it("has 'receiveAttack()' method", () => {
+    expect(GameBoard.prototype.receiveAttack).toBeDefined();
+  });
+
+  it("accepts '0,0' to '9,9' coordinates in 'receiveAttack()'", () => {
+    const gameBoard = new GameBoard();
+    expect(() => gameBoard.receiveAttack(-1, 0)).toThrow();
+    expect(() => gameBoard.receiveAttack(0, 10)).toThrow();
+    expect(() => gameBoard.receiveAttack('0', 0)).toThrow();
+    expect(() => gameBoard.receiveAttack(0, 0.5)).toThrow();
+    expect(() => gameBoard.receiveAttack(0, 0)).not.toThrow();
+    expect(() => gameBoard.receiveAttack(9, 9)).not.toThrow();
+  });
+
+  it("properly registers hit cells and ships with 'receiveAttack()'", () => {
+    const gameBoard = new GameBoard();
+    const ship = new Ship(2);
+    gameBoard.placeShip(ship, [0, 0], 'x');
+    expect(ship.isSunk()).toBeFalsy();
+    expect(gameBoard.at(0, 0).isHit).toBeFalsy();
+    expect(gameBoard.at(1, 0).isHit).toBeFalsy();
+    gameBoard.receiveAttack(0, 0);
+    expect(ship.isSunk()).toBeFalsy();
+    expect(gameBoard.at(0, 0).isHit).toBeTruthy();
+    expect(gameBoard.at(1, 0).isHit).toBeFalsy();
+    gameBoard.receiveAttack(1, 0);
+    expect(ship.isSunk()).toBeTruthy();
+    expect(gameBoard.at(0, 0).isHit).toBeTruthy();
+    expect(gameBoard.at(1, 0).isHit).toBeTruthy();
+  });
+
+  it("only allows 1 hit to ship per 1 position with 'receiveAttack()'", () => {
+    const gameBoard = new GameBoard();
+    const ship = new Ship(2);
+    gameBoard.placeShip(ship, [0, 0], 'x');
+    expect(ship.isSunk()).toBeFalsy();
+    gameBoard.receiveAttack(0, 0);
+    expect(ship.isSunk()).toBeFalsy();
+    gameBoard.receiveAttack(0, 0);
+    expect(ship.isSunk()).toBeFalsy();
   });
 });
