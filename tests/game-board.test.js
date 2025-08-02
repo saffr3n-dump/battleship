@@ -1,5 +1,7 @@
 import { describe, it, expect } from '@jest/globals';
 import GameBoard from '../src/game-board';
+import Ship from '../src/ship';
+
 describe('GameBoard', () => {
   it('is constructible', () => {
     expect(() => new GameBoard()).not.toThrow();
@@ -26,5 +28,68 @@ describe('GameBoard', () => {
         expect(gameBoard.at(i, j).ship).toBeDefined();
       }
     }
+  });
+
+  it("has 'placeShip()' method", () => {
+    expect(GameBoard.prototype.placeShip).toBeDefined();
+  });
+
+  it("accepts 'Ship', '[x, y]' position and 'x' or 'y' orientation in 'placeShip()'", () => {
+    const gameBoard = new GameBoard();
+    expect(() => gameBoard.placeShip()).toThrow();
+    expect(() => gameBoard.placeShip('test', [0, 0], 'x')).toThrow();
+    expect(() => gameBoard.placeShip(new Ship(3), ['0', '0'], 'x')).toThrow();
+    expect(() => gameBoard.placeShip(new Ship(3), [10, 10], 'x')).toThrow();
+    expect(() => gameBoard.placeShip(new Ship(3), [0, 0], 'test')).toThrow();
+    expect(() => gameBoard.placeShip(new Ship(3), [0, 0], 'x')).not.toThrow();
+  });
+
+  it("properly places ships with 'placeShip()'", () => {
+    const gameBoard = new GameBoard();
+    expect(gameBoard.at(1, 1).ship).toBeNull();
+    expect(gameBoard.at(2, 1).ship).toBeNull();
+    expect(gameBoard.at(9, 2).ship).toBeNull();
+    expect(gameBoard.at(9, 3).ship).toBeNull();
+    const ship = new Ship(2);
+    gameBoard.placeShip(ship, [1, 1], 'x');
+    expect(gameBoard.at(1, 1).ship).toBe(ship);
+    expect(gameBoard.at(2, 1).ship).toBe(ship);
+    expect(gameBoard.at(9, 2).ship).toBeNull();
+    expect(gameBoard.at(9, 3).ship).toBeNull();
+    gameBoard.placeShip(ship, [9, 2], 'y');
+    expect(gameBoard.at(1, 1).ship).toBe(ship);
+    expect(gameBoard.at(2, 1).ship).toBe(ship);
+    expect(gameBoard.at(9, 2).ship).toBe(ship);
+    expect(gameBoard.at(9, 3).ship).toBe(ship);
+  });
+
+  it("doesn't overflow grid with 'placeShip()'", () => {
+    const gameBoard = new GameBoard();
+    const ship = new Ship(3);
+    gameBoard.placeShip(ship, [9, 0], 'x');
+    expect(gameBoard.at(7, 0).ship).toBe(ship);
+    expect(gameBoard.at(8, 0).ship).toBe(ship);
+    expect(gameBoard.at(9, 0).ship).toBe(ship);
+  });
+
+  it("doesn't allow placing ships to busy cells", () => {
+    const gameBoard = new GameBoard();
+    gameBoard.placeShip(new Ship(2), [0, 0], 'x');
+    expect(() => gameBoard.placeShip(new Ship(1), [0, 0], 'x')).toThrow();
+    expect(() => gameBoard.placeShip(new Ship(1), [1, 0], 'x')).toThrow();
+    expect(() => gameBoard.placeShip(new Ship(1), [3, 0], 'x')).not.toThrow();
+  });
+
+  it("doesn't allow placing ships near busy cells", () => {
+    const gameBoard = new GameBoard();
+    gameBoard.placeShip(new Ship(1), [4, 4], 'x');
+    for (let i = -1; i <= 1; ++i) {
+      for (let j = -1; j <= 1; ++j) {
+        if (i === 0 && j === 0) continue;
+        const pos = [4 + i, 4 + j];
+        expect(() => gameBoard.placeShip(new Ship(1), pos, 'x')).toThrow();
+      }
+    }
+    expect(() => gameBoard.placeShip(new Ship(1), [7, 7], 'x')).not.toThrow();
   });
 });
