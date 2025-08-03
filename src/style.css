@@ -1,0 +1,73 @@
+:root {
+  box-sizing: border-box;
+  font-family: sans-serif;
+  font-size: 16px;
+}
+
+*,
+::before,
+::after {
+  box-sizing: inherit;
+}
+
+body {
+  margin: 0;
+}
+
+h1,
+h2 {
+  text-align: center;
+}
+
+button {
+  display: block;
+  margin: 0 auto;
+  margin-top: 1rem;
+  font-family: inherit;
+  font-size: inherit;
+}
+
+.display {
+  --cell-size: 3.5rem;
+
+  display: flex;
+  justify-content: center;
+  gap: var(--cell-size);
+
+  & .board {
+    width: fit-content;
+    border: 1px solid;
+    display: grid;
+    grid-template-columns: repeat(10, var(--cell-size));
+    grid-template-rows: repeat(10, var(--cell-size));
+
+    & .cell {
+      border: 1px solid;
+
+      &.ship {
+        background-color: green;
+      }
+
+      &.disabled {
+        background-color: lightgray;
+      }
+
+      &.hit {
+        &::after {
+          content: '•';
+          position: relative;
+          height: 100%;
+          font-size: 2rem;
+          line-height: 0;
+          display: flex;
+          justify-content: center;
+          align-items: center;
+        }
+
+        &.ship {
+          background-color: red;
+        }
+      }
+    }
+  }
+}

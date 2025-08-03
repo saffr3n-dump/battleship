@@ -1,3 +1,4 @@
+import './style.css';
 import Ship from './core/ship.js';
 import Player from './core/player.js';
 import PlayerBoard from './dom/player-board.js';
