@@ -44,6 +44,8 @@ export default class GameBoard {
       throw new Error('Position is already taken');
     }
 
+    ship.coordinates = coords;
+    ship.orientation = orientation;
     for (const [x, y] of coords) {
       this.#grid[x][y].placeShip(ship);
     }

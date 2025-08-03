@@ -3,6 +3,8 @@ export default class Ship {
   #MAX_LENGTH = 4;
   #length;
   #hits;
+  coordinates;
+  orientation;
 
   constructor(length) {
     if (!this.#isLengthValid(length)) {
@@ -10,6 +12,8 @@ export default class Ship {
     }
     this.#length = length;
     this.#hits = 0;
+    this.coordinates = [];
+    this.orientation = null;
   }
 
   get length() {
