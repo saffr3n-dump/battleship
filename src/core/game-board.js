@@ -1,5 +1,5 @@
 import Ship from './ship.js';
-import { GRID_SIZE } from '../constants.js';
+import { GRID_SIZE, SHIP_MIN_LENGTH, SHIP_MAX_LENGTH } from '../constants.js';
 
 export default class GameBoard {
   #grid;
@@ -17,6 +17,30 @@ export default class GameBoard {
       throw new Error('Position is invalid');
     }
     return this.#grid[x][y];
+  }
+
+  placeShipsRandomly() {
+    const ships = [];
+    for (let i = SHIP_MIN_LENGTH; i <= SHIP_MAX_LENGTH; ++i) {
+      for (let j = SHIP_MAX_LENGTH; j >= i; --j) {
+        ships.push(new Ship(i));
+      }
+    }
+    for (const ship of ships) {
+      while (true) {
+        try {
+          const pos = [
+            Math.floor(Math.random() * GRID_SIZE),
+            Math.floor(Math.random() * GRID_SIZE),
+          ];
+          const axis = Math.random() < 0.5 ? 'x' : 'y';
+          this.placeShip(ship, pos, axis);
+          break;
+        } catch {
+          continue;
+        }
+      }
+    }
   }
 
   placeShip(ship, position, orientation) {
