@@ -4,6 +4,8 @@ import Player from './core/player.js';
 import PlayerBoard from './dom/player-board.js';
 import EnemyBoard from './dom/enemy-board.js';
 
+document.querySelector('button').onclick = () => window.location.reload();
+
 const player = new Player();
 const enemy = new Player();
 
