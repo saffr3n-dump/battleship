@@ -1,6 +1,6 @@
+import { SHIP_MIN_LENGTH, SHIP_MAX_LENGTH } from '../constants.js';
+
 export default class Ship {
-  #MIN_LENGTH = 1;
-  #MAX_LENGTH = 4;
   #length;
   #hits;
   coordinates;
@@ -36,8 +36,8 @@ export default class Ship {
     return (
       typeof length === 'number' &&
       Number.isInteger(length) &&
-      length >= this.#MIN_LENGTH &&
-      length <= this.#MAX_LENGTH
+      length >= SHIP_MIN_LENGTH &&
+      length <= SHIP_MAX_LENGTH
     );
   }
 }
